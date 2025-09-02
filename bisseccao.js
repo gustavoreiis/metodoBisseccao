@@ -96,29 +96,39 @@ calcularBtn.onclick = () => {
 
     const func = x => f(x, coefs);
     const intervalos = [];
+    const raizes = [];
+    const EPS = 1e-12;
+
     for (let x = inicio; x < fim; x += passo) {
         const x2 = x + passo;
         if (x2 > fim) break;
-        if (func(x) * func(x2) < 0) {
+
+        const fx = func(x);
+        const fx2 = func(x2);
+
+        if (Math.abs(fx) < EPS) {
+            intervalos.push([x, x]);
+            raizes.push(x);
+        } else if (fx * fx2 < 0) {
             intervalos.push([x, x2]);
         }
     }
 
-    if (intervalos.length === 0) {
-        resultadoDiv.textContent = 'Nenhum intervalo encontrado onde a função muda de sinal no intervalo informado.';
-        return;
-    }
-
-    const raizes = [];
     for (const [a, b] of intervalos) {
+        if (a === b) continue;
         const raiz = bisseccao(func, a, b, erro);
         if (raiz !== null) raizes.push(raiz);
     }
 
+    if (raizes.length === 0) {
+        resultadoDiv.textContent = 'Nenhum intervalo encontrado onde a função muda de sinal no intervalo informado.';
+        return;
+    }
+
     let texto = `Quantidade de raízes encontradas: ${raizes.length}\n\n`;
-    raizes.forEach((r, i) => {
-        const intervalo = intervalos[i];
-        texto += `Raiz ${i + 1}: ${r.toFixed(6)} (intervalo [${intervalo[0]}, ${intervalo[1]}])\n`;
-    });
+    for (let i = 0; i < raizes.length; i++) {
+        const intervalo = intervalos[i] || [raizes[i], raizes[i]];
+        texto += `Raiz ${i + 1}: ${raizes[i].toFixed(6)} (intervalo [${intervalo[0]}, ${intervalo[1]}])\n`;
+    }
     resultadoDiv.textContent = texto;
 };

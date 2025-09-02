@@ -51,14 +51,11 @@ function calcularGauss(matriz) {
                 matriz[j][k] = matriz[j][k] - multiplicador * matriz[i][k];
             }
         }
+        exibirMatriz(matriz, i + 1);
     }
 
     let solucoes = substituicaoRetroativa(matriz);
     exibirResultados(solucoes);
-
-    for (let i = 0; i < n - 1; i++) {
-        exibirMatriz(matriz, i + 1);
-    }
 }
 
 function exibirMatriz(matriz, etapa) {
