@@ -45,6 +45,19 @@ function calcularGauss(matriz) {
     document.getElementById("etapas").innerHTML = "";
 
     for (let i = 0; i < n - 1; i++) {
+        if (matriz[i][i] === 0) {
+            let maxRow = i;
+            for (let k = i + 1; k < n; k++) {
+                if (Math.abs(matriz[k][i]) > Math.abs(matriz[maxRow][i])) {
+                    maxRow = k;
+                }
+            }
+            if (maxRow !== i) {
+                let temp = matriz[i];
+                matriz[i] = matriz[maxRow];
+                matriz[maxRow] = temp;
+            }
+        }
         for (let j = i + 1; j < n; j++) {
             const multiplicador = matriz[j][i] / matriz[i][i];
             for (let k = i; k <= n; k++) {
